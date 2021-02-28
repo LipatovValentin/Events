@@ -12,11 +12,12 @@ namespace Events
             Array<int> myArray = new Array<int>(1, 2, 3, 4, 5);
             myArray.ItemValueChanged += MyArray_ItemValueChanged;
             myArray[2] = 0;
+            myArray[2] = 1;
 
             Console.ReadKey();
         }
 
-        private static void MyArray_ItemValueChanged(object sender, ArrayElementChangeArgs<int> e)
+        private static void MyArray_ItemValueChanged(object sender, ArrayItemValueChangeArgs<int> e)
         {
             Console.WriteLine("Item[{0}] = {1} change to {2}", e.Index, e.OldValue, e.NewValue);
         }
@@ -30,7 +31,7 @@ namespace Events
         {
             get
             {
-                if (Items is null || index < 0 || index >= Items.Length)
+                if (Items == null || index < 0 || index >= Items.Length)
                 {
                     throw new IndexOutOfRangeException();
                 }
@@ -41,7 +42,7 @@ namespace Events
             }
             set
             {
-                if (Items is null || index < 0 || index >= Items.Length)
+                if (Items == null || index < 0 || index >= Items.Length)
                 {
                     throw new IndexOutOfRangeException();
                 }
@@ -49,12 +50,12 @@ namespace Events
                 {
                     T oldValue = Items[index];
                     Items[index] = value;
-                    ItemValueChanged?.Invoke(this, new ArrayElementChangeArgs<T>(oldValue, value, index));
+                    ItemValueChanged?.Invoke(this, new ArrayItemValueChangeArgs<T>(oldValue, value, index));
                 }
             }
         }
 
-        public event EventHandler<ArrayElementChangeArgs<T>> ItemValueChanged;
+        public event EventHandler<ArrayItemValueChangeArgs<T>> ItemValueChanged;
 
         public Array(params T[] items)
         {
@@ -62,13 +63,13 @@ namespace Events
         }
 
     }
-    public class ArrayElementChangeArgs<T> : EventArgs
+    public class ArrayItemValueChangeArgs<T> : EventArgs
     {
         public T OldValue { get; }
         public T NewValue { get; }
         public int Index { get; }
         public bool CancelRequested { get; set; }
-        public ArrayElementChangeArgs(T oldValue, T newValue, int index)
+        public ArrayItemValueChangeArgs(T oldValue, T newValue, int index)
         {
             OldValue = oldValue;
             NewValue = newValue;
