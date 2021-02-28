@@ -9,17 +9,17 @@ namespace Events
     {
         static void Main(string[] args)
         {
-            Array<int> myArray = new Array<int>(1, 2, 3, 4, 5);
+            Array<object> myArray = new Array<object>(1, "2", 3.0, true);
             myArray.ItemValueChanged += MyArray_ItemValueChanged;
-            myArray[2] = 0;
-            myArray[2] = 1;
+            myArray[2] = false;
+            myArray[3] = 6.0;
 
             Console.ReadKey();
         }
 
-        private static void MyArray_ItemValueChanged(object sender, ArrayItemValueChangeArgs<int> e)
+        private static void MyArray_ItemValueChanged(object sender, ArrayItemValueChangeArgs<object> e)
         {
-            Console.WriteLine("Item[{0}] = {1} change to {2}", e.Index, e.OldValue, e.NewValue);
+            Console.WriteLine("Item[{0}] = {1} change to {2}", e.Index, e.OldValue.ToString(), e.NewValue.ToString());
         }
     }
 
